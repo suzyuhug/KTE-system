@@ -250,7 +250,7 @@ Partial Class Form1
         Me.Panel6.Controls.Add(Me.Chart1)
         Me.Panel6.Location = New System.Drawing.Point(242, 130)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(915, 553)
+        Me.Panel6.Size = New System.Drawing.Size(881, 553)
         Me.Panel6.TabIndex = 9
         '
         'Chart1
