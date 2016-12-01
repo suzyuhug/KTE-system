@@ -43,6 +43,7 @@ Partial Class Form1
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Button3 = New System.Windows.Forms.Button()
         Me.Panel6 = New System.Windows.Forms.Panel()
         Me.Chart1 = New System.Windows.Forms.DataVisualization.Charting.Chart()
         Me.TrayPanel = New System.Windows.Forms.Panel()
@@ -159,7 +160,6 @@ Partial Class Form1
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Label24 = New System.Windows.Forms.Label()
-        Me.Button3 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel6.SuspendLayout()
         CType(Me.Chart1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -236,12 +236,21 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(1276, 930)
         Me.Panel1.TabIndex = 1
         '
+        'Button3
+        '
+        Me.Button3.Location = New System.Drawing.Point(175, 167)
+        Me.Button3.Name = "Button3"
+        Me.Button3.Size = New System.Drawing.Size(24, 20)
+        Me.Button3.TabIndex = 10
+        Me.Button3.Text = "Button3"
+        Me.Button3.UseVisualStyleBackColor = True
+        '
         'Panel6
         '
         Me.Panel6.Controls.Add(Me.Chart1)
         Me.Panel6.Location = New System.Drawing.Point(242, 130)
         Me.Panel6.Name = "Panel6"
-        Me.Panel6.Size = New System.Drawing.Size(874, 553)
+        Me.Panel6.Size = New System.Drawing.Size(882, 553)
         Me.Panel6.TabIndex = 9
         '
         'Chart1
@@ -1524,15 +1533,6 @@ Partial Class Form1
         Me.Label24.Size = New System.Drawing.Size(45, 13)
         Me.Label24.TabIndex = 5
         Me.Label24.Text = "Label24"
-        '
-        'Button3
-        '
-        Me.Button3.Location = New System.Drawing.Point(175, 167)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(24, 20)
-        Me.Button3.TabIndex = 10
-        Me.Button3.Text = "Button3"
-        Me.Button3.UseVisualStyleBackColor = True
         '
         'Form1
         '
