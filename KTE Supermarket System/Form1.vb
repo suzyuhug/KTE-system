@@ -680,28 +680,33 @@ Public Class Form1
     Private Sub TuEnterButton_Click(sender As Object, e As EventArgs) Handles TuEnterButton.Click
         If TuPNTextBox.Text Like "TDN-###-###-##" Or TuPNTextBox.Text Like "TDN-##########" Or TuPNTextBox.Text Like "TDN-###-##X-##" Then
 
-            Try
-                cn = New SqlConnection(SqlData)
-                Dim ii As String = "exec sp_updataQTYadd '" & TuPNTextBox.Text & "','" & Val(TuQtyTextBox.Text) & "'"
-                cm = New SqlCommand(ii, cn)
-                cn.Open()
-                cm.ExecuteNonQuery()
-                cn.Close()
-                cn.Dispose()
-                MessageBox.Show("成功上架" & TuPNTextBox.Text & "   " & TuQtyTextBox.Text & " pcs", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Panel2.Visible = False
-                Pupicbox.Visible = False
-                TuPNTextBox.Clear()
-                TuQtyTextBox.Text = 0
-                TuPNTextBox.Focus()
+            If TuQtyTextBox.Value > 0 Then
+                Try
+                    cn = New SqlConnection(SqlData)
+                    Dim ii As String = "exec sp_updataQTYadd '" & TuPNTextBox.Text & "','" & Val(TuQtyTextBox.Text) & "'"
+                    cm = New SqlCommand(ii, cn)
+                    cn.Open()
+                    cm.ExecuteNonQuery()
+                    cn.Close()
+                    cn.Dispose()
+                    MessageBox.Show("成功上架" & TuPNTextBox.Text & "   " & TuQtyTextBox.Text & " pcs", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
+                    Panel2.Visible = False
+                    Pupicbox.Visible = False
+                    TuPNTextBox.Clear()
+                    TuQtyTextBox.Text = 0
+                    TuPNTextBox.Focus()
 
-            Catch ex As Exception
-                MessageBox.Show(ex.ToString)
-            End Try
+                Catch ex As Exception
+                    MessageBox.Show(ex.ToString)
+                End Try
+
+            Else
+                MessageBox.Show("请输入正确的数量", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
 
         Else
-            'MessageBox.Show("请输入正确的料号！料号格式不对", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Messageshow(2)
+                'MessageBox.Show("请输入正确的料号！料号格式不对", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                messageshow(2)
 
         End If
 
@@ -800,7 +805,7 @@ Public Class Form1
                 cm.ExecuteNonQuery()
                 cn.Close()
                 cn.Dispose()
-                MessageBox.Show("成功拿取" & OutPnTextBox.Text & "   " & OutQtyText.Text & " pcs", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show("成功拿取" & OutPnTextBox.Text & "   " & OutQtyText.Text & " pcs", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
                 PictureBox2.Image = Image.FromFile(Application.StartupPath + "\\image\nopic.jpg")
                 OutPnTextBox.Clear()
                 Outpnview.Text = "" : OutLocview.Text = "" : OutQtyview.Text = ""
@@ -1185,6 +1190,10 @@ Public Class Form1
 
     Private Sub OutQtyText_enter(sender As Object, e As EventArgs) Handles OutQtyText.Enter
         OutQtyText.Select(0, TuQtyTextBox.Value.ToString().Length)
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs)
+
     End Sub
 
     'gksdlf
