@@ -335,11 +335,14 @@ Public Class Form1
                 If DataGridView1.RowCount > 0 Then
 
                     Dim pic As String = DataGridView1.Item("PartNumber", 0).Value.ToString
+                    Dim loc As String = DataGridView1.Item("Location", 0).Value.ToString
+                    Dim qty As String = DataGridView1.Item("Quantity", 0).Value.ToString
                     Try
                         PictureBox3.Image = Image.FromFile(Application.StartupPath + "\\image\" & pic & ".jpg")
                     Catch ex As Exception
                         PictureBox3.Image = Image.FromFile(Application.StartupPath + "\\image\nopic.jpg")
                     End Try
+                    ledkb(loc, qty)
                     addon(pic, 60)
                 Else
                     PictureBox3.Image = Image.FromFile(Application.StartupPath + "\\image\nopic.jpg")
@@ -389,6 +392,7 @@ Public Class Form1
                         TrayLocTextBox.Text = .Item("Location", 0).Value.ToString()
                         TrayQtyTextBox.Text = .Item("Quantity", 0).Value.ToString() & " pcs"
                         Picpath = .Item("PartNumber", 0).Value.ToString()
+                        ledkb(.Item("Location1", 0).Value.ToString(), TrayQtyTextBox.Text)
                         Threading.Thread.Sleep(200)
                         Ledinterface(.Item("Location1", 0).Value.ToString(), "_0")
 
@@ -505,6 +509,7 @@ Public Class Form1
                         TrayLocTextBox.Text = .Item("Location", i).Value.ToString()
                         TrayQtyTextBox.Text = .Item("Quantity", i).Value.ToString() & " pcs"
                         Picpathl = .Item("PartNumber", i).Value.ToString()
+                        ledkb(.Item("Location1", i).Value.ToString(), TrayQtyTextBox.Text)
                         Threading.Thread.Sleep(200)
                         Ledinterface(DataGridView2.Item("Location1", i).Value.ToString(), "_0")
                         Try
@@ -689,6 +694,7 @@ Public Class Form1
                     cm.ExecuteNonQuery()
                     cn.Close()
                     cn.Dispose()
+
                     MessageBox.Show("成功上架" & TuPNTextBox.Text & "   " & TuQtyTextBox.Text & " pcs", "KTE System", MessageBoxButtons.OK, MessageBoxIcon.Asterisk)
                     Panel2.Visible = False
                     Pupicbox.Visible = False
@@ -785,6 +791,7 @@ Public Class Form1
                     PictureBox2.Image = Image.FromFile(Application.StartupPath + "\\image\nopic.jpg")
                 End Try
                 Pupicbox.Visible = True
+                ledkb(OutLocview.Text, OutQtyview.Text)
                 addon(Outpnview.Text, 60)
                 OutQtyText.Focus()
             Catch ex As Exception
@@ -850,7 +857,7 @@ Public Class Form1
                 PictureBox4.Image = Image.FromFile(Application.StartupPath + "\\image\nopic.jpg")
             End Try
 
-
+            ledkb(loctmp, Label22.Text)
             Ledinterface(loctmp, "_0")
 
 
@@ -926,6 +933,7 @@ Public Class Form1
                         Catch ex As Exception
                             PictureBox4.Image = Image.FromFile(Application.StartupPath + "\\image\nopic.jpg")
                         End Try
+                        ledkb(loctmp, Label22.Text)
                         Threading.Thread.Sleep(200)
                         Ledinterface(loctmp, "_0")
 
@@ -1060,33 +1068,57 @@ Public Class Form1
     End Sub
 
 
-    Public Sub ledkb(ByRef qty As String) '========================================================显示LED看板接口，固定文字
+    Public Sub ledkb(ByRef loc As String, ByRef qty As String) '========================================================显示LED看板接口，固定文字
         Dim ErrStr As String
         Dim nResult As Long
         Dim hProgram As Long
         Dim ARect As AREARECT
         Dim FProp As FONTPROP
         Dim PProp As PLAYPROP
+
         Dim LedCommunicationInfo As New COMMUNICATIONINFO
         LedCommunicationInfo.SendType = 0
-        LedCommunicationInfo.IpStr = "192.168.1.99"
+        LedCommunicationInfo.IpStr = "192.168.0.90"
         LedCommunicationInfo.LedNumber = 1
         hProgram = LV_CreateProgram(64, 32, 2)
         Call LV_AddProgram(hProgram, 1, 0, 1)
         ARect.left = 0
         ARect.top = 0
         ARect.width = 64
-        ARect.height = 32
+        ARect.height = 16
         Call LV_AddImageTextArea(hProgram, 1, 1, ARect, 0)
 
         FProp.FontName = "黑体"
-        FProp.FontSize = 18
-        FProp.FontColor = COLOR_RED
+        FProp.FontSize = 12
+        FProp.FontColor = COLOR_GREEN
 
         PProp.InStyle = 0
-        PProp.DelayTime = 3
+        'PProp.DelayTime = 1
         PProp.Speed = 4
-        Call LV_AddStaticTextToImageTextArea(hProgram, 1, 1, ADDTYPE_STRING, qty, FProp, 1000, 2, 1)
+        Call LV_AddStaticTextToImageTextArea(hProgram, 1, 1, ADDTYPE_STRING, loc, FProp, 120, 2, 1)
+
+
+        ARect.top = 16
+        ARect.width = 64
+        ARect.height = 16
+        Call LV_AddImageTextArea(hProgram, 1, 2, ARect, 0)
+        Call LV_AddStaticTextToImageTextArea(hProgram, 1, 2, ADDTYPE_STRING, qty, FProp, 120, 2, 1)
+
+
+        LV_AddProgram(hProgram, 2, 999999999, 999999999)
+
+
+        ARect.left = 0
+        ARect.top = 8
+        ARect.width = 64
+        ARect.height = 16
+        FProp.FontName = "宋体"
+        FProp.FontSize = 12
+        FProp.FontColor = COLOR_GREEN
+
+        nResult = LV_QuickAddSingleLineTextArea(hProgram, 2, 1, ARect, ADDTYPE_STRING, "KTE Supermarket System               ", FProp, 4)
+
+
 
         nResult = LV_Send(LedCommunicationInfo, hProgram)
         LV_DeleteProgram(hProgram)
@@ -1095,7 +1127,7 @@ Public Class Form1
             LV_GetError(nResult, 256, ErrStr)
             MsgBox(ErrStr)
         Else
-            MsgBox("发送成功")
+            'MsgBox("发送成功")
         End If
     End Sub
 
@@ -1196,5 +1228,5 @@ Public Class Form1
 
     End Sub
 
-    'gksdlf
+
 End Class
